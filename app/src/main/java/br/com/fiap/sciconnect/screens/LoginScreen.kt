@@ -1,17 +1,23 @@
 package br.com.fiap.sciconnect.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 fun LoginScreen(
@@ -35,63 +43,110 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0, 0, 0))
+            .background(Color(255, 255, 255))
             .clickable {
                 darkmode.value = !darkmode.value
             }
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.background),
-            contentDescription = "Mulher Estudando",
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.Center)
-                .matchParentSize()
-                .scale(1.1f)
-
-        )
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(80.dp))
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo",
-                Modifier.scale(3.0f)
+                Modifier.scale(1.0f)
             )
-            Spacer(modifier = Modifier.height(300.dp))
             var login = remember {
                 mutableStateOf("")
             }
             TextField(
                 value = login.value,
-                onValueChange = { newValue -> login.value = newValue },
-                placeholder = { Text(text = "Login", color = Color(128, 128, 128)) },
-                shape = RoundedCornerShape(8.dp),
+                onValueChange = { newValue ->
+                    login.value = newValue
+                },
+
+                modifier = Modifier
+                    .width(300.dp)
+                    .border(border = BorderStroke(2.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp)),
+                textStyle = TextStyle(color = Color.Black),
+                label = { Text("username") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedLabelColor = Color(229, 60, 91),
+                    unfocusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color(255,255,25)
+                )
             )
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             var password = remember {
                 mutableStateOf("")
             }
             TextField(
                 value = password.value,
-                onValueChange = { newValue -> password.value = newValue },
-                placeholder = { Text(text = "Senha", color = Color(128, 128, 128)) },
-                shape = RoundedCornerShape(8.dp),
-//                KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                onValueChange = { newValue ->
+                    password.value = newValue
+                },
+                modifier = Modifier
+                    .width(300.dp)
+                    .background(color = Color(255,255,255),shape = RoundedCornerShape(10.dp))
+                    .border(border = BorderStroke(2.dp, color = Color(22, 15, 65)), shape = RoundedCornerShape(10.dp)),
+                textStyle = TextStyle(color = Color.Black),
+                label = { Text("password") },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedLabelColor = Color(229, 60, 91),
+                    unfocusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color(255,255,25)
+                )
             )
-            Spacer(modifier = Modifier.height(30.dp))
-            Button(onClick = {
-                if (login.value == "admin") {
-                    admin.value = true
-                }
-                user.value = login.value
-                navController.navigate("home")
-            }) {
-                Text(text = "Entrar")
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                modifier = Modifier
+                    .width(130.dp)
+                    .height(50.dp)
+                    .background(color = Color(229, 60, 91), shape = RoundedCornerShape(10.dp))
+                    .clickable(onClick = {}),
+                contentAlignment = androidx.compose.ui.Alignment.Center,
+            ) {
+                Text(text="Entrar")
             }
-
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp)
+                    .background(color = Color(255,255,255))
+                    .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+                    .clickable(onClick = {}),
+                contentAlignment = androidx.compose.ui.Alignment.Center,
+            ) {
+                Text(
+                    color = Color(22, 15, 65),
+                    text="Logar com"
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(modifier = Modifier
+                .height(5.dp)
+                .width(300.dp)
+                .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))){}
+            Spacer(modifier = Modifier.height(40.dp))
+            Box(
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp)
+                    .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
+                    .clickable(onClick = {}),
+                contentAlignment = androidx.compose.ui.Alignment.Center,
+            ) {
+                Text(
+                    color = Color(255,255,255),
+                    text="Inscreva-se"
+                )
+            }
         }
     }
 }
