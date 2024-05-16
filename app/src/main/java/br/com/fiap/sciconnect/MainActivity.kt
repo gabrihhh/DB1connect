@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.fiap.sciconnect.screens.AwaitScreen
 import br.com.fiap.sciconnect.screens.LoginScreen
 import br.com.fiap.sciconnect.screens.HomeScreen
 import br.com.fiap.sciconnect.screens.PostScreen
+import br.com.fiap.sciconnect.screens.RegisterScreen
 import br.com.fiap.sciconnect.ui.theme.SciConnectTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,9 +40,10 @@ class MainActivity : ComponentActivity() {
                         startDestination = "login"
                     ){
                         composable(route = "login"){ LoginScreen(navController,darkmode, admin, user) }
+                        composable(route = "register"){ RegisterScreen(navController,darkmode)}
                         composable(route = "home"){ HomeScreen(navController,darkmode, admin) }
                         composable(route = "post"){ PostScreen(navController,darkmode, admin, user) }
-                        composable(route = "await"){ AwaitScreen(navController, darkmode, admin)}
+
                     }
                 }
             }

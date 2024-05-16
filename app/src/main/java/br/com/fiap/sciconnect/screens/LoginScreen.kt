@@ -5,12 +5,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -28,6 +31,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
@@ -68,7 +72,10 @@ fun LoginScreen(
 
                 modifier = Modifier
                     .width(300.dp)
-                    .border(border = BorderStroke(2.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp)),
+                    .border(
+                        border = BorderStroke(2.dp, Color(22, 15, 65)),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
                 textStyle = TextStyle(color = Color.Black),
                 label = { Text("username") },
                 colors = TextFieldDefaults.colors(
@@ -90,8 +97,11 @@ fun LoginScreen(
                 },
                 modifier = Modifier
                     .width(300.dp)
-                    .background(color = Color(255,255,255),shape = RoundedCornerShape(10.dp))
-                    .border(border = BorderStroke(2.dp, color = Color(22, 15, 65)), shape = RoundedCornerShape(10.dp)),
+                    .background(color = Color(255, 255, 255), shape = RoundedCornerShape(10.dp))
+                    .border(
+                        border = BorderStroke(2.dp, color = Color(22, 15, 65)),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
                 textStyle = TextStyle(color = Color.Black),
                 label = { Text("password") },
                 colors = TextFieldDefaults.colors(
@@ -111,22 +121,41 @@ fun LoginScreen(
                     .clickable(onClick = {}),
                 contentAlignment = androidx.compose.ui.Alignment.Center,
             ) {
-                Text(text="Entrar")
+                Text(
+                    color= Color(255,255,255),
+                    fontWeight = FontWeight.Bold,
+                    text="Entrar"
+                )
             }
             Spacer(modifier = Modifier.height(40.dp))
             Box(
                 modifier = Modifier
                     .width(300.dp)
                     .height(50.dp)
-                    .background(color = Color(255,255,255))
-                    .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+                    .background(color = Color(255, 255, 255))
+                    .border(
+                        BorderStroke(1.dp, Color(22, 15, 65)),
+                        shape = RoundedCornerShape(10.dp)
+                    )
                     .clickable(onClick = {}),
-                contentAlignment = androidx.compose.ui.Alignment.Center,
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    color = Color(22, 15, 65),
-                    text="Logar com"
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ){
+                    Image(
+                        painter = painterResource(id = R.drawable.logogoogle),
+                        contentDescription = "Google",
+                        modifier = Modifier.scale(3.0f)
+                    )
+                    Text(
+                        color = Color(22, 15, 65),
+                        fontWeight = FontWeight.Bold,
+                        text="Logar com"
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(40.dp))
             Box(modifier = Modifier
@@ -139,11 +168,14 @@ fun LoginScreen(
                     .width(300.dp)
                     .height(50.dp)
                     .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
-                    .clickable(onClick = {}),
+                    .clickable(onClick = {
+                        navController.navigate("register")
+                    }),
                 contentAlignment = androidx.compose.ui.Alignment.Center,
             ) {
                 Text(
-                    color = Color(255,255,255),
+                    color= Color(255,255,255),
+                    fontWeight = FontWeight.Bold,
                     text="Inscreva-se"
                 )
             }
