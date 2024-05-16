@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,14 +42,15 @@ var PaginarRegistro by mutableStateOf<String?>(null)
 var RegistroEscolhido by mutableStateOf<String?>(null)
 var Nome by mutableStateOf<String>("")
 var Cpf by mutableStateOf<String>("")
-var selectedOption by mutableStateOf<Boolean>(false)
+var radioOption by mutableStateOf<Boolean>(false)
 var Senha by mutableStateOf<String>("")
 var SenhaNovamente by mutableStateOf<String>("")
 var Formacao by mutableStateOf<String>("")
 var Pass by mutableStateOf<Boolean>(true)
 var MsgError by mutableStateOf<Boolean>(false)
-
-
+var expandedSelect by mutableStateOf<Boolean>(false)
+var selectedOption by mutableStateOf<String>("")
+val options = listOf("Opção 1", "Opção 2", "Opção 3")
 
 //definindo class para construção do JSON no final
 data class Registro(
@@ -68,7 +68,7 @@ fun RegisterScreen(navController: NavController,darkmode: MutableState<Boolean>)
             RegistroEscolhido = null
             Nome = ""
             Cpf = ""
-            selectedOption = false
+            radioOption = false
             Senha = ""
             SenhaNovamente = ""
             Formacao = ""
@@ -91,7 +91,19 @@ fun RegisterScreen(navController: NavController,darkmode: MutableState<Boolean>)
 
 @Composable
 fun Interesses() {
-    TODO("Not yet implemented")
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Header(focus = "Interesses")
+        Column {
+            Label(text="Selecione as areas em que tem interesse")
+
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+        }
+    }
 }
 
 @Composable
@@ -207,12 +219,12 @@ fun About(){
        Column(modifier = Modifier.width(300.dp)){
            Label(text = "Ja possui formação?")
            RadioGroup(
-               selectedOption = selectedOption,
-               onOptionSelected = { selectedOption = it }
+               selectedOption = radioOption,
+               onOptionSelected = { radioOption = it }
            )
        }
        Spacer(modifier = Modifier.height(20.dp))
-       if(selectedOption) {
+       if(radioOption) {
            Column(
            ) {
                Label("Qual?")
@@ -314,7 +326,7 @@ fun About(){
 //                       MsgError = true
 //                   }
 
-                 PaginarRegistro = "Interesses"
+                   PaginarRegistro = "Interesses"
 
                }),
            contentAlignment = androidx.compose.ui.Alignment.Center,
