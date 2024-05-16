@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -35,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 //Definindo variaveis globais
@@ -48,10 +54,9 @@ var SenhaNovamente by mutableStateOf<String>("")
 var Formacao by mutableStateOf<String>("")
 var Pass by mutableStateOf<Boolean>(true)
 var MsgError by mutableStateOf<Boolean>(false)
-var expandedSelect by mutableStateOf<Boolean>(false)
-var selectedOption by mutableStateOf<String>("")
-val options = listOf("Opção 1", "Opção 2", "Opção 3")
-
+var RadioOptionInteresse by mutableStateOf<String>("")
+var RadioSelectInteresse by mutableStateOf<Boolean>(false)
+var Descricao by mutableStateOf<String>("")
 //definindo class para construção do JSON no final
 data class Registro(
     val name: String,
@@ -96,13 +101,77 @@ fun Interesses() {
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Header(focus = "Interesses")
-        Column {
-            Label(text="Selecione as areas em que tem interesse")
 
-
-            Spacer(modifier = Modifier.height(30.dp))
-
+        Text(
+            text = "Selecione as areas em que tem interesse",
+            color = Color(229, 60, 91),
+            fontWeight = FontWeight.Bold,
+            fontSize = 12.sp
+        )
+        Column(modifier = Modifier.width(300.dp)){
+            
+            Spacer(modifier = Modifier.height(120.dp))
         }
+        Label(text = "Áreas de interesse")
+        Column(modifier = Modifier.width(300.dp)){
+
+            Spacer(modifier = Modifier.height(120.dp))
+        }
+        Column(modifier = Modifier.width(300.dp)){
+            Label(text="Oque te trouxe até a DB1Connect?")
+            RadioGroupInteresse(
+                selectedOption = RadioSelectInteresse,
+                onOptionSelected = { RadioOptionInteresse = it }
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Column{
+            Text(
+                text = "Escreva uma rapida descrição de você",
+                color = Color(229, 60, 91),
+                fontWeight = FontWeight.Bold,
+                fontSize = 13.sp
+            )
+            TextField(
+                value = Descricao,
+                onValueChange = { newValue ->
+                    Descricao = newValue
+                },
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp)
+                    .border(
+                        border = BorderStroke(2.dp, Color(22, 15, 65)),
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                textStyle = TextStyle(color = Color.Black),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    focusedLabelColor = Color(229, 60, 91),
+                    unfocusedLabelColor = Color.Gray,
+                    focusedIndicatorColor = Color(255,255,25)
+                )
+            )
+        }
+        Spacer(modifier = Modifier.height(30.dp))
+        Box(
+            modifier = Modifier
+                .width(300.dp)
+                .height(50.dp)
+                .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
+                .clickable(onClick = {
+
+                }),
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+        ) {
+            Text(
+                color= Color(255,255,255),
+                fontWeight = FontWeight.Bold,
+                text="Prosseguir"
+            )
+        }
+
     }
 }
 
@@ -218,7 +287,7 @@ fun About(){
        Spacer(modifier = Modifier.height(20.dp))
        Column(modifier = Modifier.width(300.dp)){
            Label(text = "Ja possui formação?")
-           RadioGroup(
+           RadioGroupAbout(
                selectedOption = radioOption,
                onOptionSelected = { radioOption = it }
            )
@@ -410,11 +479,11 @@ fun RadioButtonOption(
             onClick = onSelect
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text=text, color = Color(22, 15, 65), fontWeight = FontWeight.Bold)
+        Text(text=text, color = Color(22, 15, 65), fontWeight = FontWeight.Bold, fontSize = 10.sp)
     }
 }
 @Composable
-fun RadioGroup(
+fun RadioGroupAbout(
     selectedOption: Boolean,
     onOptionSelected: (Boolean) -> Unit
 ) {
@@ -429,6 +498,25 @@ fun RadioGroup(
             text = "Não",
             selected = !selectedOption,
             onSelect = { onOptionSelected(false) }
+        )
+    }
+}
+@Composable
+fun RadioGroupInteresse(
+    selectedOption: Boolean,
+    onOptionSelected: (String) -> Unit
+) {
+    Column(
+    ) {
+        RadioButtonOption(
+            text = "Compartilhar conhecimentos e aprendizados",
+            selected = selectedOption,
+            onSelect = { onOptionSelected("Compartilhar conhecimentos e aprendizados") }
+        )
+        RadioButtonOption(
+            text = "Aprender com profissionais e professores",
+            selected = !selectedOption,
+            onSelect = { onOptionSelected("Aprender com profissionais e professores") }
         )
     }
 }
