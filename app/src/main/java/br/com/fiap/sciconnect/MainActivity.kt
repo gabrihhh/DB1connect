@@ -43,7 +43,6 @@ class MainActivity : ComponentActivity() {
                         composable(route = "register"){ RegisterScreen(navController,darkmode)}
                         composable(route = "home"){ HomeScreen(navController,darkmode, admin) }
                         composable(route = "post"){ PostScreen(navController,darkmode, admin, user) }
-
                     }
                 }
             }

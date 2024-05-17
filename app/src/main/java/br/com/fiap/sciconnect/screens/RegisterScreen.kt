@@ -1,8 +1,19 @@
 package br.com.fiap.sciconnect.screens
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.icu.text.ListFormatter.Width
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
+import android.os.Environment
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,15 +23,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
@@ -36,12 +53,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import br.com.fiap.sciconnect.R
+import java.io.File
+import java.io.IOException
+import java.util.Date
+import java.util.Locale
 
 //Definindo variaveis globais
 var PaginarRegistro by mutableStateOf<String?>(null)
@@ -57,6 +88,9 @@ var MsgError by mutableStateOf<Boolean>(false)
 var RadioOptionInteresse by mutableStateOf<String>("")
 var RadioSelectInteresse by mutableStateOf<Boolean>(false)
 var Descricao by mutableStateOf<String>("")
+val items = listOf("Item 1", "Item 2", "Item 3", "Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10")
+var selectedItems by mutableStateOf(listOf<String>())
+var Avatar by mutableStateOf<String>("")
 //definindo class para construção do JSON no final
 data class Registro(
     val name: String,
@@ -79,6 +113,11 @@ fun RegisterScreen(navController: NavController,darkmode: MutableState<Boolean>)
             Formacao = ""
             Pass = true
             MsgError = false
+            RadioOptionInteresse =""
+            RadioSelectInteresse = false
+            Descricao = ""
+            selectedItems = listOf<String>()
+            Avatar = ""
         }
     }
     Box(modifier = Modifier
@@ -89,7 +128,56 @@ fun RegisterScreen(navController: NavController,darkmode: MutableState<Boolean>)
         when (PaginarRegistro) {
             "Interesses" -> Interesses()
             "About" -> About()
+            "Avatar" -> Avatar(navController)
             else -> RegisterEscolha()
+        }
+    }
+}
+
+@Composable
+fun Avatar(navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        Spacer(modifier = Modifier.height(50.dp))
+        Text(
+            text = "Agora é só escolher uma foto!",
+            color = Color(22, 15, 65),
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .width(300.dp)
+                .height(300.dp)
+                .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+                .clickable {  }
+            ,
+            contentAlignment = Alignment.Center
+        ){
+            Image(
+                painter = painterResource(id = R.drawable.photoicon),
+                contentDescription = "Foto",
+                Modifier.scale(2.0f)
+            )
+        }
+        Spacer(modifier = Modifier.height(50.dp))
+        Box(
+            modifier = Modifier
+                .width(300.dp)
+                .height(50.dp)
+                .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
+                .clickable(onClick = {
+                    navController.navigate("home")
+                }),
+            contentAlignment = androidx.compose.ui.Alignment.Center,
+        ) {
+            Text(
+                color= Color(255,255,255),
+                fontWeight = FontWeight.Bold,
+                text="Concluir"
+            )
         }
     }
 }
@@ -109,13 +197,34 @@ fun Interesses() {
             fontSize = 12.sp
         )
         Column(modifier = Modifier.width(300.dp)){
-            
-            Spacer(modifier = Modifier.height(120.dp))
+            SelectableBox(items = items) { selection ->
+                selectedItems = selection
+            }
         }
         Label(text = "Áreas de interesse")
-        Column(modifier = Modifier.width(300.dp)){
+        Box(modifier = Modifier.width(300.dp).height(100.dp).border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))){
+            val scrollState = rememberScrollState()
+            Column(modifier = Modifier.verticalScroll(scrollState)){
+                selectedItems.forEach { selectedItem ->
+                    Box(
+                        modifier = Modifier
+                            .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+                            .fillMaxWidth(),
+                        ){
+                        Column{
+                            Text(
+                                text = selectedItem,
+                                fontSize = 18.sp,
+                                color = Color(22, 15, 65),
+                                modifier = Modifier.padding(5.dp,7.dp)
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
+                    }
 
-            Spacer(modifier = Modifier.height(120.dp))
+                }
+
+            }
         }
         Column(modifier = Modifier.width(300.dp)){
             Label(text="Oque te trouxe até a DB1Connect?")
@@ -161,7 +270,7 @@ fun Interesses() {
                 .height(50.dp)
                 .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
                 .clickable(onClick = {
-
+                    PaginarRegistro = "Avatar"
                 }),
             contentAlignment = androidx.compose.ui.Alignment.Center,
         ) {
@@ -520,3 +629,51 @@ fun RadioGroupInteresse(
         )
     }
 }
+
+@Composable
+fun SelectableBox(
+    items: List<String>,
+    onSelectionChanged: (List<String>) -> Unit
+) {
+    // Estado para armazenar os itens selecionados
+    var selectedItems by remember { mutableStateOf(setOf<String>()) }
+
+    // Função para lidar com a seleção de itens
+     fun toggleSelection(item: String) {
+        selectedItems = if (selectedItems.contains(item)) {
+            selectedItems - item
+        } else {
+            selectedItems + item
+        }
+        // Chama a função de callback quando a seleção muda
+        onSelectionChanged(selectedItems.toList())
+    }
+    val scrollState = rememberScrollState()
+    // Composable Box que contém a lista de itens
+    Box(modifier = Modifier
+        .padding(16.dp)
+        .border(BorderStroke(1.dp, Color(22, 15, 65)),
+            shape = RoundedCornerShape(10.dp))
+        .height(100.dp)
+    ) {
+        Row {
+            Column(modifier = Modifier
+                .weight(1f)
+                .verticalScroll(scrollState)) {
+                items.forEach { item ->
+                    Text(
+                        text = item,
+                        color = Color(22, 15, 65),
+                        fontSize = 18.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .clickable { toggleSelection(item) }
+                            .padding(8.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
