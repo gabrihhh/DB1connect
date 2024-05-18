@@ -44,12 +44,6 @@ fun HomeScreen(
             .fillMaxSize()
     ) {
         Header(darkmode = darkmode, admin = admin)
-        //val scroll = rememberScrollState()
-        val context = LocalContext.current
-        val postRepository = PostRepository(context)
-        var listaPosts = remember {
-            mutableStateOf(postRepository.listarPosts())
-        }
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)
@@ -59,132 +53,8 @@ fun HomeScreen(
                 )
             //.verticalScroll(scroll)
         ) {
-            PostLazyList(listaPosts.value, darkmode, postRepository, navController)
+
         }
         Navigation(navController, darkmode = darkmode, admin = admin)
-    }
-}
-
-@Composable
-fun mockImage() {
-    Box(
-        modifier = Modifier
-            .width(40.dp)
-            .height(40.dp)
-            .background(Color(0, 0, 0))
-    )
-}
-
-@Composable
-fun PostLazyList(
-    posts: List<Post>,
-    darkmode: MutableState<Boolean>,
-    postRepository: PostRepository,
-    navController: NavController
-) {
-    LazyColumn() {
-        items(posts) { post ->
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 5.dp)
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .background(if (darkmode.value) Color(49, 52, 57) else Color(255, 255, 255))
-            ) {
-                Box(modifier = Modifier.padding(10.dp)) {
-                    Column() {
-                        Row {
-                            LetterAvatar(name = post.user, darkmode)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Column() {
-                                Text(
-                                    text = post.user,
-                                    color = if (!darkmode.value) Color(49, 52, 57) else Color(
-                                        255,
-                                        255,
-                                        255
-                                    ),
-                                    fontSize = 16.sp
-                                )
-                                Text(
-                                    text = post.data,
-                                    color = if (!darkmode.value) Color(49, 52, 57) else Color(
-                                        255,
-                                        255,
-                                        255
-                                    ),
-                                    fontSize = 10.sp
-                                )
-                            }
-                            if (post.verified == false) {
-                            Row(
-                                horizontalArrangement = Arrangement.End,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        //.size(40.dp)
-                                        .clickable {
-                                            val postToUpdate = Post(
-                                                id = post.id,
-                                                titulo = post.titulo,
-                                                data = post.data,
-                                                descricao = post.descricao,
-                                                disciplina = post.disciplina,
-                                                user = post.user,
-                                                verified = true
-                                            )
-                                            postRepository.atualizarPost(postToUpdate)
-                                            navController.navigate("await")
-                                        }
-                                ) {
-                                    Text(text = "Aprovar")
-                                }
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Text(text = "|")
-                                Spacer(modifier = Modifier.width(10.dp))
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier
-                                        //.size(40.dp)
-                                        .clickable {
-                                            val postToDelete = Post(
-                                                id = post.id,
-                                                titulo = post.titulo,
-                                                data = post.data,
-                                                descricao = post.descricao,
-                                                disciplina = post.disciplina,
-                                                user = post.user,
-                                                verified = false
-                                            )
-                                            postRepository.excluirPost(postToDelete)
-                                            navController.navigate("await")
-                                        }
-                                ) {
-                                    Text(text = "Reprovar")
-                                }
-                            }
-                        }
-
-                        }
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Text(
-                            text = post.titulo,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = if (!darkmode.value) Color(49, 52, 57) else Color(255, 255, 255)
-                        )
-                        Spacer(modifier = Modifier.height(5.dp))
-                        Text(
-                            text = post.descricao,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 12.sp,
-                            color = if (!darkmode.value) Color(49, 52, 57) else Color(255, 255, 255)
-                        )
-                    }
-                }
-            }
-        }
     }
 }

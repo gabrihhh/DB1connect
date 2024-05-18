@@ -52,24 +52,9 @@ fun Navigation(
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (darkmode.value) R.drawable.persondark else R.drawable.person
+                        id = if (darkmode.value) R.drawable.homedark else R.drawable.home
                     ),
-                    contentDescription = "Person",
-                    modifier = Modifier
-                        .size(20.dp)
-                )
-            }
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clickable {}
-            ) {
-                Image(
-                    painter = painterResource(
-                        id = if (darkmode.value) R.drawable.searchdark else R.drawable.search
-                    ),
-                    contentDescription = "Search",
+                    contentDescription = "Home",
                     modifier = Modifier
                         .size(20.dp)
                 )
@@ -131,9 +116,9 @@ fun Navigation(
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (darkmode.value) R.drawable.homedark else R.drawable.home
+                        id = if (darkmode.value) R.drawable.persondark else R.drawable.person
                     ),
-                    contentDescription = "Home",
+                    contentDescription = "List",
                     modifier = Modifier
                         .size(20.dp)
                 )

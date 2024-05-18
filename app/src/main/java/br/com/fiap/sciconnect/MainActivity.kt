@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     }
                     NavHost(
                         navController = navController,
-                        startDestination = "login"
+                        startDestination = "home"
                     ){
                         composable(route = "login"){ LoginScreen(navController,darkmode, admin, user) }
                         composable(route = "register"){ RegisterScreen(navController,darkmode)}
