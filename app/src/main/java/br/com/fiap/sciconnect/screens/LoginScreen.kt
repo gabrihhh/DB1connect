@@ -41,16 +41,11 @@ import br.com.fiap.sciconnect.R
 
 fun LoginScreen(
     navController: NavController,
-    darkmode: MutableState<Boolean>,
-    admin: MutableState<Boolean>, user: MutableState<String>
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(255, 255, 255))
-            .clickable {
-                darkmode.value = !darkmode.value
-            }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

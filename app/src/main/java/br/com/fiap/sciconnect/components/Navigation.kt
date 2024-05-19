@@ -29,8 +29,6 @@ import br.com.fiap.sciconnect.database.repository.PostRepository
 @Composable
 fun Navigation(
     navController: NavController,
-    darkmode: MutableState<Boolean>,
-    admin: MutableState<Boolean>
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -40,7 +38,7 @@ fun Navigation(
                 .height(100.dp)
                 .align(alignment = Alignment.BottomStart)
                 .background(
-                    if (darkmode.value) Color(49, 52, 57) else Color(255, 255, 255)
+                    Color(255, 255, 255)
                 ),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
@@ -48,11 +46,13 @@ fun Navigation(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {}
+                    .clickable {
+                        navController.navigate("home")
+                    }
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (darkmode.value) R.drawable.homedark else R.drawable.home
+                         R.drawable.home
                     ),
                     contentDescription = "Home",
                     modifier = Modifier
@@ -64,14 +64,14 @@ fun Navigation(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        navController.navigate("post")
+                        navController.navigate("explorer")
                     }
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (darkmode.value) R.drawable.adddark else R.drawable.add
+                        id =  R.drawable.search
                     ),
-                    contentDescription = "Add",
+                    contentDescription = "explorer",
                     modifier = Modifier
                         .size(20.dp)
                 )
@@ -80,45 +80,31 @@ fun Navigation(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {navController.navigate("await")}
+                    .clickable {navController.navigate("message")}
             ) {
                 val context = LocalContext.current
                 val postRepository = PostRepository(context)
-                var listaAwaitingPosts = remember {
-                    mutableStateOf(postRepository.listarAwaitingPosts())
-                }
-                if(listaAwaitingPosts.value.size > 0 && admin.value == true){
                     Image(
                         painter = painterResource(
-                            id = if (darkmode.value) R.drawable.listdark else R.drawable.list_notification
-                        ),
-                        contentDescription = "List",
-                        modifier = Modifier
-                            .size(28.dp)
-                    )
-                }else{
-                    Image(
-                        painter = painterResource(
-                            id = if (darkmode.value) R.drawable.listdark else R.drawable.list
+                            id =  R.drawable.list
                         ),
                         contentDescription = "List",
                         modifier = Modifier
                             .size(20.dp)
                     )
-                }
 
             }
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { navController.navigate("home") }
+                    .clickable { navController.navigate("profile") }
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (darkmode.value) R.drawable.persondark else R.drawable.person
+                        id = R.drawable.person
                     ),
-                    contentDescription = "List",
+                    contentDescription = "Profile",
                     modifier = Modifier
                         .size(20.dp)
                 )

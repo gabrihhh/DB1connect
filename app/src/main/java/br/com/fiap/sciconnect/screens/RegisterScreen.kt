@@ -100,7 +100,7 @@ data class Registro(
     val formacao: String
 )
 @Composable
-fun RegisterScreen(navController: NavController,darkmode: MutableState<Boolean>){
+fun RegisterScreen(navController: NavController){
     DisposableEffect(Unit) {
         onDispose {
             PaginarRegistro = null

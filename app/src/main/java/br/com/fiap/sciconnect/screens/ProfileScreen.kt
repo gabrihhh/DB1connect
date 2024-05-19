@@ -37,7 +37,7 @@ import br.com.fiap.sciconnect.components.LetterAvatar
 import br.com.fiap.sciconnect.components.Navigation
 
 @Composable
-fun HomeScreen(
+fun ProfileScreen(
     navController: NavController,
 ) {
     Box(
@@ -56,13 +56,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center
             //.verticalScroll(scroll)
         ) {
-            Box(modifier = Modifier
-                .width(300.dp)
-                .height(400.dp)
-                .border(BorderStroke(1.dp,Color.Black), shape = RoundedCornerShape(10.dp))
-            ){
-
-            }
+            Text(text = "Profile")
         }
         Navigation(navController)
     }

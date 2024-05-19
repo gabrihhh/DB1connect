@@ -31,16 +31,16 @@ import androidx.compose.ui.unit.dp
 import br.com.fiap.sciconnect.R
 
 @Composable
-fun Header(darkmode:MutableState<Boolean>, admin: MutableState<Boolean>){
+fun Header(){
     Box(modifier = Modifier
         .fillMaxWidth()
-        .height(200.dp)
+        .height(100.dp)
         .background(Color.White)){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ){
             Box(modifier = Modifier
-                .height(70.dp)
+                .height(100.dp)
                 .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ){
@@ -54,15 +54,10 @@ fun Header(darkmode:MutableState<Boolean>, admin: MutableState<Boolean>){
                     Image(
                         painter = painterResource(id = R.drawable.alarm),
                         contentDescription = "Alarm",
-                        Modifier.scale(2.0f)
+                        Modifier.scale(2.5f)
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            Box(modifier = Modifier
-                .height(1.dp)
-                .width(350.dp)
-                .background(Color.Black, shape = RoundedCornerShape(10.dp))){}
         }
     }
 }

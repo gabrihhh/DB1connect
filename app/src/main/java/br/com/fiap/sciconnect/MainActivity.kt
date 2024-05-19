@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.fiap.sciconnect.screens.ExplorerScreen
 import br.com.fiap.sciconnect.screens.LoginScreen
 import br.com.fiap.sciconnect.screens.HomeScreen
-import br.com.fiap.sciconnect.screens.PostScreen
+import br.com.fiap.sciconnect.screens.MessageScreen
+import br.com.fiap.sciconnect.screens.ProfileScreen
 import br.com.fiap.sciconnect.screens.RegisterScreen
 import br.com.fiap.sciconnect.ui.theme.SciConnectTheme
 
@@ -39,10 +41,12 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = "home"
                     ){
-                        composable(route = "login"){ LoginScreen(navController,darkmode, admin, user) }
-                        composable(route = "register"){ RegisterScreen(navController,darkmode)}
-                        composable(route = "home"){ HomeScreen(navController,darkmode, admin) }
-                        composable(route = "post"){ PostScreen(navController,darkmode, admin, user) }
+                        composable(route = "login"){ LoginScreen(navController) }
+                        composable(route = "register"){ RegisterScreen(navController)}
+                        composable(route = "home"){ HomeScreen(navController) }
+                        composable(route = "profile"){ ProfileScreen(navController)}
+                        composable(route = "explorer"){ ExplorerScreen(navController)}
+                        composable(route = "message"){ MessageScreen(navController)}
                     }
                 }
             }
