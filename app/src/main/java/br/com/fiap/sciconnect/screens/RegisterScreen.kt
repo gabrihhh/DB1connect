@@ -262,6 +262,7 @@ fun Interesses() {
                 placeholder = {Text(text = "Descrição...")},
                 modifier = Modifier
                     .width(300.dp)
+                    .height(80.dp)
                     .border(
                         border = BorderStroke(2.dp, Color(22, 15, 65)),
                         shape = RoundedCornerShape(10.dp)
@@ -666,6 +667,7 @@ fun SelectableBox(
         .border(BorderStroke(1.dp, Color(22, 15, 65)),
             shape = RoundedCornerShape(10.dp))
         .height(100.dp)
+        .width(300.dp)
     ) {
         Row {
             Column(modifier = Modifier

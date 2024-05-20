@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -46,7 +48,10 @@ import br.com.fiap.sciconnect.components.Navigation
 
 var PaginarExplorer by mutableStateOf<String?>(null)
 var Filtro by mutableStateOf<String>("")
-
+var ListSelect = listOf("Item 1", "Item 2", "Item 3", "Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10")
+var selectedListSelect by mutableStateOf(listOf<String>())
+var RadioSelectFiltro by mutableStateOf<Boolean>(true)
+var RadioOptionFiltro by mutableStateOf<String>("")
 @Composable
 fun ExplorerScreen(
     navController: NavController,
@@ -68,8 +73,8 @@ fun ExplorerScreen(
             //.verticalScroll(scroll)
         ) {
             when (PaginarExplorer) {
-                "Interesses" -> Interesses()
-                else -> ExplorerDefault()
+                "ExplorerReturn" -> ExplorerReturn()
+                else -> ExplorerFilter()
             }
         }
         Navigation(navController,rota = "explore")
@@ -77,12 +82,112 @@ fun ExplorerScreen(
 }
 
 @Composable
-fun ExplorerDefault(){
+fun ExplorerReturn() {
     Box(modifier = Modifier
         .width(300.dp)
-        .height(400.dp)){
-        Filter()
+        .height(500.dp)){
+        Column{
+            Filter()
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(modifier = Modifier
+                .width(300.dp)
+                .height(300.dp)
+                .border(
+                    BorderStroke(1.dp,Color(22, 15, 65)),
+                    shape = RoundedCornerShape(10.dp)
+                )
+            ){
+                //retorno do filtro
+            }
+        }
     }
+}
+
+@Composable
+fun ExplorerFilter(){
+    Box(modifier = Modifier
+        .width(300.dp)
+        .height(500.dp)){
+        Column{
+            Filter()
+            Spacer(modifier = Modifier.height(20.dp))
+            Label(text = "Encontre pessoas com os mesmos interesses que você")
+
+            SelectableBox(items = ListSelect) { selection ->
+                selectedListSelect = selection
+            }
+
+            Label(text = "Áreas de interesse")
+            val scrollState = rememberScrollState()
+            Box(modifier = Modifier
+                .width(300.dp)
+                .height(50.dp)
+                .border(BorderStroke(1.dp, Color(22, 15, 65)), shape = RoundedCornerShape(1.dp))
+                .verticalScroll(scrollState)){
+                Column(modifier = Modifier
+                    .padding(10.dp),
+                    verticalArrangement = Arrangement.SpaceAround){
+                    selectedListSelect.forEach { selectedItem ->
+                        Box(
+                            modifier = Modifier
+                                .border(
+                                    BorderStroke(1.dp, Color(22, 15, 65)),
+                                    shape = RoundedCornerShape(10.dp)
+                                )
+                                .clickable {
+                                    selectedListSelect =
+                                        selectedListSelect.filter { it != selectedItem }
+                                }
+                                .padding(10.dp, 5.dp)
+                            ,
+                        ){
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ){
+                                Text(
+                                    text = selectedItem,
+                                    fontSize = 18.sp,
+                                    color = Color(22, 15, 65),
+                                )
+                                Spacer(modifier = Modifier.width(25.dp))
+                                Text(
+                                    text = "x",
+                                    color = Color(22, 15, 65),
+                                    fontSize = 17.sp,
+                                )
+                            }
+                        }
+
+                    }
+
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            RadioGroupFiltro(
+                selectedOption = RadioSelectFiltro,
+                onOptionSelected = { RadioOptionFiltro = it }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Box(
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(50.dp)
+                    .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
+                    .clickable(onClick = {
+                        PaginarExplorer = "ExplorerReturn"
+                    }),
+                contentAlignment = androidx.compose.ui.Alignment.Center,
+            ) {
+                Text(
+                    color= Color(255,255,255),
+                    fontWeight = FontWeight.Bold,
+                    text="Aplicar filtro"
+                )
+            }
+        }
+    }
+
 }
 
 
@@ -107,7 +212,29 @@ fun Filter(){
                 )
                 )
             Image(painter = painterResource(id = R.drawable.search), contentDescription = "Search",
-                modifier = Modifier.scale(2.5f))
+                modifier = Modifier.scale(2.5f).clickable {
+                    PaginarExplorer = "ExplorerFiltro"
+                })
         }
+    }
+}
+
+@Composable
+fun RadioGroupFiltro(
+    selectedOption: Boolean,
+    onOptionSelected: (String) -> Unit
+) {
+    Column(
+    ) {
+        RadioButtonOption(
+            text = "Tutores, Professores e profissionais da área",
+            selected = selectedOption,
+            onSelect = { onOptionSelected("Tutores") }
+        )
+        RadioButtonOption(
+            text = "Aprendizes, Alunos e entusiastas",
+            selected = !selectedOption,
+            onSelect = { onOptionSelected("Aprendizes") }
+        )
     }
 }
