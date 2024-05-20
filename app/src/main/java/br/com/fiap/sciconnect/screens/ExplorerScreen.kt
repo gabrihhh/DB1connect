@@ -54,6 +54,8 @@ var ListSelect = listOf("Item 1", "Item 2", "Item 3", "Item 4","Item 5","Item 6"
 var selectedListSelect by mutableStateOf(listOf<String>())
 var RadioSelectFiltro by mutableStateOf<Boolean>(true)
 var RadioOptionFiltro by mutableStateOf<String>("")
+var ListaRetornoFake = listOf("Gabelias", "Maycon", "Miguel")
+
 @Composable
 fun ExplorerScreen(
     navController: NavController,
@@ -101,22 +103,30 @@ fun ExplorerReturn() {
                     shape = RoundedCornerShape(10.dp)
                 )
             ){
-                //retorno da requisição do filtro
-
-                Box(modifier = Modifier.padding(10.dp,5.dp)){
-                    Box(
-                        modifier = Modifier
-                            .height(30.dp)
-                            .fillMaxWidth()
-                            .background(Color(255,255,255)),
-                            contentAlignment = Alignment.CenterStart
-                    ){
-                        Row(){
-                            Spacer(modifier = Modifier.width(10.dp))
-                            CircleWithLetter(name = "Gabelias",size = 20.dp)
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Text(text = "Gabelias", color = Color(22, 15, 65))
+                Column {
+                    //retorno da requisição do filtro
+                    ListaRetornoFake.forEach{ item ->
+                    Box(modifier = Modifier
+                        .padding(10.dp, 5.dp)
+                        .clickable {
+                            //fazer algo com o item
+                        }){
+                            Box(
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .fillMaxWidth()
+                                    .background(Color(255, 255, 255)),
+                                contentAlignment = Alignment.CenterStart
+                            ){
+                                Row(){
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    CircleWithLetter(name = item,size = 20.dp)
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(text = item, color = Color(22, 15, 65))
+                                }
+                            }
                         }
+
                     }
                 }
             }
@@ -197,7 +207,7 @@ fun ExplorerFilter(){
                     .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
                     .clickable(onClick = {
                         //faltando informação do button radio
-                        if(Filtro !== "" && selectedListSelect.isNotEmpty()){
+                        if (Filtro !== "" && selectedListSelect.isNotEmpty()) {
                             PaginarExplorer = "ExplorerReturn"
                         }
                     }),
