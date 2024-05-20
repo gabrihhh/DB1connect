@@ -68,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
+import androidx.wear.compose.material.dialog.Alert
 import br.com.fiap.sciconnect.R
 import java.io.File
 import java.io.IOException
@@ -196,7 +197,7 @@ fun Interesses() {
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
-        Column(modifier = Modifier.width(300.dp)){
+        Column(modifier = Modifier.width(300.dp).padding(10.dp)){
             SelectableBox(items = items) { selection ->
                 selectedItems = selection
             }
@@ -204,25 +205,33 @@ fun Interesses() {
         Label(text = "Áreas de interesse")
         Box(modifier = Modifier.width(300.dp).height(100.dp).border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))){
             val scrollState = rememberScrollState()
-            Column(modifier = Modifier.verticalScroll(scrollState)){
+            Column(modifier = Modifier.verticalScroll(scrollState).padding(10.dp),
+                verticalArrangement = Arrangement.SpaceAround){
                 selectedItems.forEach { selectedItem ->
                     Box(
                         modifier = Modifier
                             .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
-                            .fillMaxWidth()
                             .clickable{
-
+                                selectedItems = selectedItems.filter{it != selectedItem}
                             }
+                            .padding(10.dp,5.dp)
                         ,
                         ){
-                        Column{
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
                             Text(
                                 text = selectedItem,
                                 fontSize = 18.sp,
                                 color = Color(22, 15, 65),
-                                modifier = Modifier.padding(5.dp,7.dp)
                             )
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.width(25.dp))
+                            Text(
+                                text = "x",
+                                color = Color(22, 15, 65),
+                                fontSize = 17.sp,
+                            )
                         }
                     }
 
@@ -250,9 +259,9 @@ fun Interesses() {
                 onValueChange = { newValue ->
                     Descricao = newValue
                 },
+                placeholder = {Text(text = "Descrição...")},
                 modifier = Modifier
                     .width(300.dp)
-                    .height(50.dp)
                     .border(
                         border = BorderStroke(2.dp, Color(22, 15, 65)),
                         shape = RoundedCornerShape(10.dp)
