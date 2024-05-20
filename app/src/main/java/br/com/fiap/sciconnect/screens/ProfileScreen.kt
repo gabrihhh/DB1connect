@@ -58,6 +58,6 @@ fun ProfileScreen(
         ) {
             Text(text = "Profile")
         }
-        Navigation(navController)
+        Navigation(navController, rota = "user")
     }
 }

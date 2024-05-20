@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -29,6 +30,7 @@ import br.com.fiap.sciconnect.database.repository.PostRepository
 @Composable
 fun Navigation(
     navController: NavController,
+    rota: String
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -52,11 +54,15 @@ fun Navigation(
             ) {
                 Image(
                     painter = painterResource(
-                         R.drawable.home
+                        if(rota ==="home"){
+                            R.drawable.exploreativo
+                        }else{
+                            R.drawable.explore
+                        }
                     ),
                     contentDescription = "Home",
                     modifier = Modifier
-                        .size(20.dp)
+                        .scale(2.0f)
                 )
             }
             Box(
@@ -69,11 +75,15 @@ fun Navigation(
             ) {
                 Image(
                     painter = painterResource(
-                        id =  R.drawable.search
+                        if(rota ==="explore"){
+                            R.drawable.searchativo
+                        }else{
+                            R.drawable.search
+                        }
                     ),
                     contentDescription = "explorer",
                     modifier = Modifier
-                        .size(20.dp)
+                        .scale(2.0f)
                 )
             }
             Box(
@@ -86,11 +96,15 @@ fun Navigation(
                 val postRepository = PostRepository(context)
                     Image(
                         painter = painterResource(
-                            id =  R.drawable.list
+                            if(rota ==="msg"){
+                                R.drawable.msgativo
+                            }else{
+                                R.drawable.msg
+                            }
                         ),
                         contentDescription = "List",
                         modifier = Modifier
-                            .size(20.dp)
+                            .scale(2.0f)
                     )
 
             }
@@ -102,11 +116,15 @@ fun Navigation(
             ) {
                 Image(
                     painter = painterResource(
-                        id = R.drawable.person
+                        if(rota ==="user"){
+                            R.drawable.userativo
+                        }else{
+                            R.drawable.user
+                        }
                     ),
                     contentDescription = "Profile",
                     modifier = Modifier
-                        .size(20.dp)
+                        .scale(2.0f)
                 )
             }
         }

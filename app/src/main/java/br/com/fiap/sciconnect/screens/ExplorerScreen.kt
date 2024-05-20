@@ -58,6 +58,6 @@ fun ExplorerScreen(
         ) {
             Text(text = "Explorer")
         }
-        Navigation(navController)
+        Navigation(navController,rota = "explore")
     }
 }

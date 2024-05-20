@@ -54,7 +54,7 @@ fun Header(){
                     Image(
                         painter = painterResource(id = R.drawable.alarm),
                         contentDescription = "Alarm",
-                        Modifier.scale(2.5f)
+                        Modifier.scale(3.0f)
                     )
                 }
             }

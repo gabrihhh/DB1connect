@@ -38,6 +38,6 @@ fun MessageScreen(
         ) {
             Text(text = "Message")
         }
-        Navigation(navController)
+        Navigation(navController, rota = "msg")
     }
 }
