@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "br.com.fiap.sciconnect"
+    namespace = "br.com.fiap.DB1Connect"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "br.com.fiap.sciconnect"
+        applicationId = "br.com.fiap.DB1Connect"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
@@ -72,4 +72,7 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.5.2")
     annotationProcessor ("androidx.room:room-compiler:2.5.2")
     kapt ("androidx.room:room-compiler:2.5.2")
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 }

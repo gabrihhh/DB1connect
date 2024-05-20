@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SciConnect"
+rootProject.name = "DB1Connect"
 include(":app")
  
