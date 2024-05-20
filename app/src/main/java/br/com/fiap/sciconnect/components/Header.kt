@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.fiap.sciconnect.R
 
@@ -50,7 +51,7 @@ fun Header(){
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                     ){
-                    CircleWithLetter(name = "Gabriel")
+                    CircleWithLetter(name = "Gabriel", size = 30.dp)
                     Image(
                         painter = painterResource(id = R.drawable.alarm),
                         contentDescription = "Alarm",
@@ -65,11 +66,12 @@ fun Header(){
 @Composable
 fun CircleWithLetter(
     name: String,
-    circleColor: Color = Color(22, 15, 65)
+    circleColor: Color = Color(22, 15, 65),
+    size: Dp
 ) {
     Box(
         modifier = Modifier
-            .size(30.dp)
+            .size(size)
             .background(circleColor, CircleShape),
         contentAlignment = Alignment.Center
     ) {

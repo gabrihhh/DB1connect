@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
+import br.com.fiap.sciconnect.components.CircleWithLetter
 import br.com.fiap.sciconnect.database.repository.PostRepository
 import br.com.fiap.sciconnect.model.Post
 import br.com.fiap.sciconnect.components.Header
@@ -89,15 +91,34 @@ fun ExplorerReturn() {
         Column{
             Filter()
             Spacer(modifier = Modifier.height(20.dp))
+            val scrollState = rememberScrollState()
             Box(modifier = Modifier
                 .width(300.dp)
                 .height(300.dp)
-                .border(
-                    BorderStroke(1.dp,Color(22, 15, 65)),
+                .verticalScroll(scrollState)
+                .background(
+                    Color(22, 15, 65),
                     shape = RoundedCornerShape(10.dp)
                 )
             ){
-                //retorno do filtro
+                //retorno da requisição do filtro
+
+                Box(modifier = Modifier.padding(10.dp,5.dp)){
+                    Box(
+                        modifier = Modifier
+                            .height(30.dp)
+                            .fillMaxWidth()
+                            .background(Color(255,255,255)),
+                            contentAlignment = Alignment.CenterStart
+                    ){
+                        Row(){
+                            Spacer(modifier = Modifier.width(10.dp))
+                            CircleWithLetter(name = "Gabelias",size = 20.dp)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = "Gabelias", color = Color(22, 15, 65))
+                        }
+                    }
+                }
             }
         }
     }
@@ -175,7 +196,10 @@ fun ExplorerFilter(){
                     .height(50.dp)
                     .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
                     .clickable(onClick = {
-                        PaginarExplorer = "ExplorerReturn"
+                        //faltando informação do button radio
+                        if(Filtro !== "" && selectedListSelect.isNotEmpty()){
+                            PaginarExplorer = "ExplorerReturn"
+                        }
                     }),
                 contentAlignment = androidx.compose.ui.Alignment.Center,
             ) {
@@ -195,7 +219,10 @@ fun ExplorerFilter(){
 fun Filter(){
     Box(modifier = Modifier
         .width(300.dp)
-        .border(BorderStroke(1.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp)),
+        .border(BorderStroke(1.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+        .clickable {
+            PaginarExplorer = "ExplorerFiltro"
+        },
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -209,12 +236,11 @@ fun Filter(){
                     focusedContainerColor = Color.White,
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black
-                )
+                ),
                 )
             Image(painter = painterResource(id = R.drawable.search), contentDescription = "Search",
-                modifier = Modifier.scale(2.5f).clickable {
-                    PaginarExplorer = "ExplorerFiltro"
-                })
+                modifier = Modifier
+                    .scale(2.5f))
         }
     }
 }
