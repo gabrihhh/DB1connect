@@ -209,7 +209,11 @@ fun Interesses() {
                     Box(
                         modifier = Modifier
                             .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .clickable{
+
+                            }
+                        ,
                         ){
                         Column{
                             Text(
@@ -340,31 +344,29 @@ fun About(){
        horizontalAlignment = Alignment.CenterHorizontally
    ){
        Header(focus = "About")
-       //Box do nome
        Column(
        ){
            Label("Nome")
-           TextField(
-               value = Nome,
-               onValueChange = { newValue ->
-                   Nome = newValue
-               },
+           Box(
                modifier = Modifier
                    .width(300.dp)
-                   .height(40.dp)
                    .border(
                        border = BorderStroke(2.dp, Color(22, 15, 65)),
                        shape = RoundedCornerShape(10.dp)
-                   ),
-               textStyle = TextStyle(color = Color.Black),
-               colors = TextFieldDefaults.colors(
-                   unfocusedContainerColor = Color.White,
-                   focusedContainerColor = Color.White,
-                   focusedLabelColor = Color(229, 60, 91),
-                   unfocusedLabelColor = Color.Gray,
-                   focusedIndicatorColor = Color(255,255,25)
+                   )){
+               TextField(
+                   value = Nome,
+                   onValueChange = { newValue ->
+                       Nome = newValue
+                   },
+                   placeholder = {Text(text="usuário...")},
+                   colors = TextFieldDefaults.colors(
+                       unfocusedContainerColor = Color.White,
+                       focusedContainerColor = Color.White,
+                       focusedTextColor = Color(0,0,0),
+                   )
                )
-           )
+           }
        }
        Spacer(modifier = Modifier.height(10.dp))
        //box do cpf
@@ -376,9 +378,9 @@ fun About(){
                onValueChange = { newValue ->
                    Cpf = newValue
                },
+               placeholder = {Text(text="cpf...")},
                modifier = Modifier
                    .width(300.dp)
-                   .height(40.dp)
                    .border(
                        border = BorderStroke(2.dp, Color(22, 15, 65)),
                        shape = RoundedCornerShape(10.dp)
@@ -411,9 +413,9 @@ fun About(){
                    onValueChange = { newValue ->
                        Formacao = newValue
                    },
+                   placeholder = {Text(text="Escreva sua formação...")},
                    modifier = Modifier
                        .width(300.dp)
-                       .height(40.dp)
                        .border(
                            border = BorderStroke(2.dp, Color(22, 15, 65)),
                            shape = RoundedCornerShape(10.dp)
@@ -438,9 +440,9 @@ fun About(){
                onValueChange = { newValue ->
                    Senha = newValue
                },
+               placeholder = {Text(text="Senha...")},
                modifier = Modifier
                    .width(300.dp)
-                   .height(40.dp)
                    .border(
                        border = BorderStroke(2.dp, Color(22, 15, 65)),
                        shape = RoundedCornerShape(10.dp)
@@ -464,9 +466,9 @@ fun About(){
                onValueChange = { newValue ->
                    SenhaNovamente = newValue
                },
+               placeholder = {Text(text="Confirme a senha...")},
                modifier = Modifier
                    .width(300.dp)
-                   .height(40.dp)
                    .border(
                        border = BorderStroke(2.dp, Color(22, 15, 65)),
                        shape = RoundedCornerShape(10.dp)
@@ -524,7 +526,7 @@ fun About(){
 
 @Composable
 fun Header(focus:String){
-    Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(20.dp))
     Row(modifier = Modifier
         .width(300.dp)
         .height(50.dp),
@@ -561,7 +563,7 @@ fun Header(focus:String){
             }
         }
     }
-    Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 }
 
 @Composable
