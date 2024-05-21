@@ -8,6 +8,7 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -70,6 +71,11 @@ import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.wear.compose.material.dialog.Alert
 import br.com.fiap.sciconnect.R
+import br.com.fiap.sciconnect.model.User
+import br.com.fiap.sciconnect.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.util.Date
@@ -127,8 +133,8 @@ fun RegisterScreen(navController: NavController){
         contentAlignment = Alignment.Center
     ){
         when (PaginarRegistro) {
-            "Interesses" -> Interesses()
             "About" -> About()
+            "Interesses" -> Interesses()
             "Avatar" -> Avatar(navController)
             else -> RegisterEscolha()
         }
@@ -152,8 +158,8 @@ fun Avatar(navController: NavController) {
             modifier = Modifier
                 .width(300.dp)
                 .height(300.dp)
-                .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
-                .clickable {  }
+                .border(BorderStroke(1.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
+                .clickable { }
             ,
             contentAlignment = Alignment.Center
         ){
@@ -170,7 +176,30 @@ fun Avatar(navController: NavController) {
                 .height(50.dp)
                 .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
                 .clickable(onClick = {
-                    navController.navigate("home")
+                    var newUser: User = User(
+                        nome = Nome,
+                        avatar = "teste",
+                        formado = radioOption,
+                        formadoTitulo = Formacao,
+                        senha = Senha,
+                        interesses = selectedItems,
+                        professor = RadioSelectInteresse,
+                        login = Nome,
+                        texto = Descricao
+                    )
+                    var call = RetrofitFactory()
+                        .getUsersService()
+                        .postUser(newUser)
+                    call.enqueue(object : Callback<User> {
+                        override fun onResponse(call: Call<User>, response: Response<User>) {
+                            Log.i("FIAP", "onResponse: ${response.body()}")
+                        }
+
+                        override fun onFailure(call: Call<User>, t: Throwable) {
+                            Log.i("FIAP", "onResponse: ${t.message}")
+                        }
+
+                    })
                 }),
             contentAlignment = androidx.compose.ui.Alignment.Center,
         ) {
@@ -197,24 +226,34 @@ fun Interesses() {
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
-        Column(modifier = Modifier.width(300.dp).padding(10.dp)){
+        Column(modifier = Modifier
+            .width(300.dp)
+            .padding(10.dp)){
             SelectableBox(items = items) { selection ->
                 selectedItems = selection
             }
         }
         Label(text = "Áreas de interesse")
-        Box(modifier = Modifier.width(300.dp).height(100.dp).border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))){
+        Box(modifier = Modifier
+            .width(300.dp)
+            .height(100.dp)
+            .border(BorderStroke(1.dp, Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))){
             val scrollState = rememberScrollState()
-            Column(modifier = Modifier.verticalScroll(scrollState).padding(10.dp),
+            Column(modifier = Modifier
+                .verticalScroll(scrollState)
+                .padding(10.dp),
                 verticalArrangement = Arrangement.SpaceAround){
                 selectedItems.forEach { selectedItem ->
                     Box(
                         modifier = Modifier
-                            .border(BorderStroke(1.dp,Color(22, 15, 65)), shape = RoundedCornerShape(10.dp))
-                            .clickable{
-                                selectedItems = selectedItems.filter{it != selectedItem}
+                            .border(
+                                BorderStroke(1.dp, Color(22, 15, 65)),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .clickable {
+                                selectedItems = selectedItems.filter { it != selectedItem }
                             }
-                            .padding(10.dp,5.dp)
+                            .padding(10.dp, 5.dp)
                         ,
                         ){
                         Row(
@@ -240,7 +279,7 @@ fun Interesses() {
             }
         }
         Column(modifier = Modifier.width(300.dp)){
-            Label(text="Oque te trouxe até a DB1Connect?")
+            Label(text="O que te trouxe até a DB1Connect?")
             RadioGroupInteresse(
                 selectedOption = RadioSelectInteresse,
                 onOptionSelected = { RadioOptionInteresse = it }
@@ -664,8 +703,10 @@ fun SelectableBox(
     // Composable Box que contém a lista de itens
     Box(modifier = Modifier
         .padding(16.dp)
-        .border(BorderStroke(1.dp, Color(22, 15, 65)),
-            shape = RoundedCornerShape(10.dp))
+        .border(
+            BorderStroke(1.dp, Color(22, 15, 65)),
+            shape = RoundedCornerShape(10.dp)
+        )
         .height(100.dp)
         .width(300.dp)
     ) {

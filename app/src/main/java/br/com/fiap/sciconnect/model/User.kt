@@ -7,7 +7,8 @@ data class User (
     val formadoTitulo: String = "",
     val senha: String = "",
     val professor: Boolean = false,
-    val interesses: Array<String> =  emptyArray(),
+    val interesses: List<String> = emptyList() ,
     val login: String = "",
-    val id: String = ""
+    val id: String = "",
+    val texto: String = ""
 )
