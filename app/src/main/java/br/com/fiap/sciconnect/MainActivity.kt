@@ -43,13 +43,13 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = "login"
                     ){
-                        composable(route = "login"){ LoginScreen(navController) }
+                        composable(route = "login"){ LoginScreen(navController,user) }
                         composable(route = "register"){ RegisterScreen(navController, user)}
                         if (user != null) {
                             composable(route = "home") { HomeScreen(navController, user) }
-                            composable(route = "profile") { ProfileScreen(navController,) }
-                            composable(route = "explorer") { ExplorerScreen(navController) }
-                            composable(route = "message") { MessageScreen(navController) }
+                            composable(route = "profile") { ProfileScreen(navController,user) }
+                            composable(route = "explorer") { ExplorerScreen(navController,user) }
+                            composable(route = "message") { MessageScreen(navController,user) }
                         }else
                         {
                             navController.navigate("login")

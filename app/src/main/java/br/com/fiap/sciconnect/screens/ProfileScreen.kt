@@ -35,16 +35,18 @@ import br.com.fiap.sciconnect.model.Post
 import br.com.fiap.sciconnect.components.Header
 import br.com.fiap.sciconnect.components.LetterAvatar
 import br.com.fiap.sciconnect.components.Navigation
+import br.com.fiap.sciconnect.model.User
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
+    user: MutableState<User?>
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        //Header()
+        Header(user)
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)

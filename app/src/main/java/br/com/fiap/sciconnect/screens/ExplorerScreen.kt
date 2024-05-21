@@ -60,18 +60,18 @@ var ListSelect = listOf("Item 1", "Item 2", "Item 3", "Item 4","Item 5","Item 6"
 var selectedListSelect by mutableStateOf(listOf<String>())
 var RadioSelectFiltro by mutableStateOf<Boolean>(true)
 var RadioOptionFiltro by mutableStateOf<String>("")
-var ListaRetornoFake = listOf("Gabelias", "Maycon", "Miguel")
 var ListaUser by mutableStateOf(listOf<User?>(null))
 
 @Composable
 fun ExplorerScreen(
     navController: NavController,
+    user: MutableState<User?>
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        //Header()
+        Header(user)
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)

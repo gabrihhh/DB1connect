@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,16 +16,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.components.Header
 import br.com.fiap.sciconnect.components.Navigation
+import br.com.fiap.sciconnect.model.User
 
 @Composable
 fun MessageScreen(
     navController: NavController,
+    user: MutableState<User?>
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        //Header()
+        Header(user)
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)

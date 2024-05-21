@@ -1,5 +1,6 @@
 package br.com.fiap.sciconnect.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,8 +24,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -35,12 +38,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
+import br.com.fiap.sciconnect.model.User
+import br.com.fiap.sciconnect.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+var errorLogin by mutableStateOf<Boolean>(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
 fun LoginScreen(
     navController: NavController,
+    user: MutableState<User?>
 ) {
     Box(
         modifier = Modifier
@@ -107,13 +117,49 @@ fun LoginScreen(
                     focusedIndicatorColor = Color(255,255,25)
                 )
             )
-            Spacer(modifier = Modifier.height(40.dp))
+
+            if(errorLogin){
+                Spacer(modifier = Modifier.height(20.dp))
+                Label(text = "Revise as informações e tente novamente")
+                Spacer(modifier = Modifier.height(20.dp))
+
+            }else{
+                Spacer(modifier = Modifier.height(40.dp))
+            }
             Box(
                 modifier = Modifier
                     .width(130.dp)
                     .height(50.dp)
                     .background(color = Color(229, 60, 91), shape = RoundedCornerShape(10.dp))
-                    .clickable(onClick = {}),
+                    .clickable(onClick = {
+                        if(login.value !== "" && password.value !== "") {
+                            var call = RetrofitFactory()
+                                .getUsersService()
+                                .getUsuarios()
+                            call.enqueue(object : Callback<List<User>> {
+                                override fun onResponse(
+                                    call: Call<List<User>>,
+                                    response: Response<List<User>>
+                                ) {
+                                    response
+                                        .body()!!
+                                        .forEach { elem ->
+                                            if (elem.nome.trim() == login.value.trim() && elem.senha.trim() == password.value.trim()) {
+                                                user.value = elem
+                                                navController.navigate("home")
+                                            } else {
+                                                errorLogin = true
+                                            }
+                                        }
+
+                                }
+
+                                override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                                    Log.i("FIAP", "onResponse: ${t.message}")
+                                }
+                            })
+                        }
+                    }),
                 contentAlignment = androidx.compose.ui.Alignment.Center,
             ) {
                 Text(
@@ -136,7 +182,9 @@ fun LoginScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 60.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 60.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ){
