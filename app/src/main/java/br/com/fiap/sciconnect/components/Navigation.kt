@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
 import br.com.fiap.sciconnect.database.repository.PostRepository
 import br.com.fiap.sciconnect.model.User
+import br.com.fiap.sciconnect.screens.ListaUser
+import br.com.fiap.sciconnect.screens.errorLogin
 import br.com.fiap.sciconnect.service.RetrofitFactory
 import br.com.fiap.sciconnect.service.UserService
 import retrofit2.Call
@@ -98,7 +100,25 @@ fun Navigation(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable { navController.navigate("message") }
+                    .clickable(onClick = {
+                            var call = RetrofitFactory()
+                                .getUsersService()
+                                .getUsuarios()
+                            call.enqueue(object : Callback<List<User>> {
+                                override fun onResponse(
+                                    call: Call<List<User>>,
+                                    response: Response<List<User>>
+                                ) {
+                                   ListaUser = response.body()!!
+
+                                    navController.navigate("message")
+                                }
+
+                                override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                                    Log.i("FIAP", "onResponse: ${t.message}")
+                                }
+                            })
+                    })
             ) {
                 val context = LocalContext.current
                 val postRepository = PostRepository(context)
