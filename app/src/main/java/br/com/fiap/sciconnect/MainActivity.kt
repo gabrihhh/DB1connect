@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.com.fiap.sciconnect.model.User
 import br.com.fiap.sciconnect.screens.ExplorerScreen
 import br.com.fiap.sciconnect.screens.LoginScreen
 import br.com.fiap.sciconnect.screens.HomeScreen
@@ -35,18 +36,24 @@ class MainActivity : ComponentActivity() {
                         mutableStateOf(false)
                     }
                     var user = remember {
-                        mutableStateOf("admin")
+                        mutableStateOf<User?>(null)
                     }
+
                     NavHost(
                         navController = navController,
                         startDestination = "login"
                     ){
                         composable(route = "login"){ LoginScreen(navController) }
-                        composable(route = "register"){ RegisterScreen(navController)}
-                        composable(route = "home"){ HomeScreen(navController) }
-                        composable(route = "profile"){ ProfileScreen(navController)}
-                        composable(route = "explorer"){ ExplorerScreen(navController)}
-                        composable(route = "message"){ MessageScreen(navController)}
+                        composable(route = "register"){ RegisterScreen(navController, user)}
+                        if (user != null) {
+                            composable(route = "home") { HomeScreen(navController, user) }
+                            composable(route = "profile") { ProfileScreen(navController,) }
+                            composable(route = "explorer") { ExplorerScreen(navController) }
+                            composable(route = "message") { MessageScreen(navController) }
+                        }else
+                        {
+                            navController.navigate("login")
+                        }
                     }
                 }
             }

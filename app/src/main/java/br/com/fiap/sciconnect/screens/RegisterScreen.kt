@@ -1,46 +1,25 @@
 package br.com.fiap.sciconnect.screens
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.icu.text.ListFormatter.Width
-import android.icu.text.SimpleDateFormat
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -56,30 +35,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
-import androidx.wear.compose.material.dialog.Alert
 import br.com.fiap.sciconnect.R
 import br.com.fiap.sciconnect.model.User
 import br.com.fiap.sciconnect.service.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
-import java.io.IOException
-import java.util.Date
-import java.util.Locale
 
 //Definindo variaveis globais
 var PaginarRegistro by mutableStateOf<String?>(null)
@@ -95,19 +62,13 @@ var MsgError by mutableStateOf<Boolean>(false)
 var RadioOptionInteresse by mutableStateOf<String>("")
 var RadioSelectInteresse by mutableStateOf<Boolean>(false)
 var Descricao by mutableStateOf<String>("")
-val items = listOf("Item 1", "Item 2", "Item 3", "Item 4","Item 5","Item 6","Item 7","Item 8","Item 9","Item 10")
+val items = listOf("big data", "engenharia", "backend", "frontend", "fullstack", "data science", "qualidade", "produtos")
 var selectedItems by mutableStateOf(listOf<String>())
 var Avatar by mutableStateOf<String>("")
-//definindo class para construção do JSON no final
-data class Registro(
-    val name: String,
-    val cpf: String,
-    val typeUser: String,
-    val senha:String,
-    val formacao: String
-)
+
+
 @Composable
-fun RegisterScreen(navController: NavController){
+fun RegisterScreen(navController: NavController, user: MutableState<User?>){
     DisposableEffect(Unit) {
         onDispose {
             PaginarRegistro = null
@@ -135,14 +96,14 @@ fun RegisterScreen(navController: NavController){
         when (PaginarRegistro) {
             "About" -> About()
             "Interesses" -> Interesses()
-            "Avatar" -> Avatar(navController)
+            "Avatar" -> Avatar(navController, user)
             else -> RegisterEscolha()
         }
     }
 }
 
 @Composable
-fun Avatar(navController: NavController) {
+fun Avatar(navController: NavController, user: MutableState<User?>) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -187,12 +148,15 @@ fun Avatar(navController: NavController) {
                         login = Nome,
                         texto = Descricao
                     )
+                    user.value = newUser
+
                     var call = RetrofitFactory()
                         .getUsersService()
                         .postUser(newUser)
                     call.enqueue(object : Callback<User> {
                         override fun onResponse(call: Call<User>, response: Response<User>) {
                             Log.i("FIAP", "onResponse: ${response.body()}")
+                            navController.navigate("home")
                         }
 
                         override fun onFailure(call: Call<User>, t: Throwable) {

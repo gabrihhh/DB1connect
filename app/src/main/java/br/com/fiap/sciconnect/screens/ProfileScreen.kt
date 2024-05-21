@@ -44,7 +44,7 @@ fun ProfileScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Header()
+        //Header()
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)

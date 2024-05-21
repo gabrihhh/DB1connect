@@ -30,9 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import br.com.fiap.sciconnect.R
+import br.com.fiap.sciconnect.model.User
 
 @Composable
-fun Header(){
+fun Header(user: MutableState<User?>){
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(100.dp)
@@ -51,7 +52,7 @@ fun Header(){
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                     ){
-                    CircleWithLetter(name = "Gabriel", size = 30.dp)
+                    CircleWithLetter(name = user.value!!.nome, size = 30.dp)
                     Image(
                         painter = painterResource(id = R.drawable.alarm),
                         contentDescription = "Alarm",

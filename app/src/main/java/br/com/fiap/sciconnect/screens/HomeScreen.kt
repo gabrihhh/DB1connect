@@ -15,20 +15,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,21 +30,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
-import br.com.fiap.sciconnect.database.repository.PostRepository
-import br.com.fiap.sciconnect.model.Post
 import br.com.fiap.sciconnect.components.Header
-import br.com.fiap.sciconnect.components.LetterAvatar
 import br.com.fiap.sciconnect.components.Navigation
+import br.com.fiap.sciconnect.model.User
 
 @Composable
 fun HomeScreen(
     navController: NavController,
+    user: MutableState<User?>,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Header()
+        Header(user)
         Column(
             modifier = Modifier
                 .padding(vertical = 100.dp)
