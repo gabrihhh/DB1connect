@@ -1,5 +1,6 @@
 package br.com.fiap.sciconnect.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +48,11 @@ import br.com.fiap.sciconnect.model.Post
 import br.com.fiap.sciconnect.components.Header
 import br.com.fiap.sciconnect.components.LetterAvatar
 import br.com.fiap.sciconnect.components.Navigation
+import br.com.fiap.sciconnect.model.User
+import br.com.fiap.sciconnect.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 var PaginarExplorer by mutableStateOf<String?>(null)
 var Filtro by mutableStateOf<String>("")
@@ -55,6 +61,7 @@ var selectedListSelect by mutableStateOf(listOf<String>())
 var RadioSelectFiltro by mutableStateOf<Boolean>(true)
 var RadioOptionFiltro by mutableStateOf<String>("")
 var ListaRetornoFake = listOf("Gabelias", "Maycon", "Miguel")
+var ListaUser by mutableStateOf(listOf<User?>(null))
 
 @Composable
 fun ExplorerScreen(
@@ -105,7 +112,7 @@ fun ExplorerReturn() {
             ){
                 Column {
                     //retorno da requisição do filtro
-                    ListaRetornoFake.forEach{ item ->
+                    ListaUser.forEach{ item ->
                     Box(modifier = Modifier
                         .padding(10.dp, 5.dp)
                         .clickable {
@@ -120,9 +127,11 @@ fun ExplorerReturn() {
                             ){
                                 Row(){
                                     Spacer(modifier = Modifier.width(10.dp))
-                                    CircleWithLetter(name = item,size = 20.dp)
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Text(text = item, color = Color(22, 15, 65))
+                                    if (item != null) {
+                                        CircleWithLetter(name = item.nome.toString(),size = 20.dp)
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Text(text = item.nome, color = Color(22, 15, 65))
+                                    }
                                 }
                             }
                         }
@@ -206,10 +215,24 @@ fun ExplorerFilter(){
                     .height(50.dp)
                     .background(color = Color(22, 15, 65), shape = RoundedCornerShape(10.dp))
                     .clickable(onClick = {
-                        //faltando informação do button radio
-                        if (Filtro !== "" && selectedListSelect.isNotEmpty()) {
-                            PaginarExplorer = "ExplorerReturn"
-                        }
+                        var call = RetrofitFactory()
+                            .getUsersService()
+                            .getUsuarios()
+                        call.enqueue(object : Callback<List<User>> {
+                            override fun onResponse(
+                                call: Call<List<User>>,
+                                response: Response<List<User>>
+                            ) {
+                                Log.i("FIAP", "onResponse: ${response.body()}")
+                                ListaUser = response.body()!!
+                                PaginarExplorer = "ExplorerReturn"
+                            }
+
+                            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                                Log.i("FIAP", "onResponse: ${t.message}")
+                            }
+
+                        })
                     }),
                 contentAlignment = androidx.compose.ui.Alignment.Center,
             ) {

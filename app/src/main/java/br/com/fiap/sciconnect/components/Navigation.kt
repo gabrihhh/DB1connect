@@ -1,5 +1,6 @@
 package br.com.fiap.sciconnect.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import br.com.fiap.sciconnect.R
 import br.com.fiap.sciconnect.database.repository.PostRepository
+import br.com.fiap.sciconnect.model.User
+import br.com.fiap.sciconnect.service.RetrofitFactory
+import br.com.fiap.sciconnect.service.UserService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun Navigation(
@@ -49,6 +56,7 @@ fun Navigation(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
+
                         navController.navigate("home")
                     }
             ) {
@@ -90,7 +98,7 @@ fun Navigation(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(40.dp)
-                    .clickable {navController.navigate("message")}
+                    .clickable { navController.navigate("message") }
             ) {
                 val context = LocalContext.current
                 val postRepository = PostRepository(context)
