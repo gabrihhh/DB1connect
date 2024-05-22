@@ -1,6 +1,8 @@
 package br.com.fiap.sciconnect.screens
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,9 +40,17 @@ import br.com.fiap.sciconnect.components.Header
 import br.com.fiap.sciconnect.components.Navigation
 import br.com.fiap.sciconnect.model.User
 import br.com.fiap.sciconnect.service.RetrofitFactory
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.Manifest
+import android.content.Context
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.runtime.LaunchedEffect
+import br.com.fiap.sciconnect.service.NotificationHandler
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 var match by mutableStateOf<Boolean>(false)
 var Count by mutableStateOf<Int>(1)
@@ -49,12 +58,22 @@ var ListaUsers by mutableStateOf(listOf<User?>(null))
 var nomePerfil by mutableStateOf("gabriel")
 var tituloPerfil by mutableStateOf("Desenvolvedor")
 var textoPerfil by mutableStateOf("Sou o seu guia na jornada da programação. Comigo, você vai explorar o fascinante mundo do JavaScript. Juntos, vamos mergulhar nos conceitos, desafios e possibilidades que essa linguagem oferece. Estou aqui para responder às suas perguntas, ajudar a resolver problemas e compartilhar dicas valiosas. Vamos codificar e transformar ideias em realidade!")
-
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
     user: MutableState<User?>,
+    context: Context
 ) {
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
+
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -165,6 +184,7 @@ fun HomeScreen(
                             ListaUsers[Count]!!.interesses.forEach{ interessesPerfil ->
                                 if(user.value!!.interesses.contains(interessesPerfil)){
                                     match = true
+                                    notificationHandler.showSimpleNotification()
                                 }else{
                                     match = false
                                 }

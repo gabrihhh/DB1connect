@@ -1,8 +1,10 @@
 package br.com.fiap.sciconnect
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,9 +24,11 @@ import br.com.fiap.sciconnect.screens.RegisterScreen
 import br.com.fiap.sciconnect.ui.theme.SciConnectTheme
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             SciConnectTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -38,6 +42,9 @@ class MainActivity : ComponentActivity() {
                     var user = remember {
                         mutableStateOf<User?>(null)
                     }
+                    var context = remember{
+                        this
+                    }
 
                     NavHost(
                         navController = navController,
@@ -46,7 +53,7 @@ class MainActivity : ComponentActivity() {
                         composable(route = "login"){ LoginScreen(navController,user) }
                         composable(route = "register"){ RegisterScreen(navController, user)}
                         if (user != null) {
-                            composable(route = "home") { HomeScreen(navController, user) }
+                            composable(route = "home") { HomeScreen(navController, user, context) }
                             composable(route = "profile") { ProfileScreen(navController,user) }
                             composable(route = "explorer") { ExplorerScreen(navController,user) }
                             composable(route = "message") { MessageScreen(navController,user) }
