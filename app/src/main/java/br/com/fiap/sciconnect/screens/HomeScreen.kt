@@ -53,8 +53,9 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 var match by mutableStateOf<Boolean>(false)
-var Count by mutableStateOf<Int>(1)
+var Count by mutableStateOf<Int>(0)
 var ListaUsers by mutableStateOf(listOf<User?>(null))
+var avatarPerfil by mutableStateOf("gabriel")
 var nomePerfil by mutableStateOf("gabriel")
 var tituloPerfil by mutableStateOf("Desenvolvedor")
 var textoPerfil by mutableStateOf("Sou o seu guia na jornada da programação. Comigo, você vai explorar o fascinante mundo do JavaScript. Juntos, vamos mergulhar nos conceitos, desafios e possibilidades que essa linguagem oferece. Estou aqui para responder às suas perguntas, ajudar a resolver problemas e compartilhar dicas valiosas. Vamos codificar e transformar ideias em realidade!")
@@ -105,11 +106,6 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.SpaceAround
 
                     ){
-                        Text(
-                            text = match.toString(),
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
                         Text(
                             text = nomePerfil,
                             fontWeight = FontWeight.Bold,
@@ -181,15 +177,22 @@ fun HomeScreen(
                             nomePerfil = ListaUsers[Count]!!.nome
                             tituloPerfil = ListaUsers[Count]!!.formadoTitulo
                             textoPerfil = ListaUsers[Count]!!.texto
-                            ListaUsers[Count]!!.interesses.forEach{ interessesPerfil ->
-                                if(user.value!!.interesses.contains(interessesPerfil)){
-                                    match = true
-                                    notificationHandler.showSimpleNotification()
-                                }else{
-                                    match = false
+                            Log.i("FIAP_Count", "onResponse: Count antes da lista ${Count}")
+                            Log.i("FIAP_Count", "onResponse: Count menos 1 ${((Count)-1)}")
+                            if(((Count)-1) >= 0) {
+                                ListaUsers[((Count) - 1)]!!.interesses.forEach { interessesPerfil ->
+                                    if (user.value!!.interesses.contains(interessesPerfil)) {
+                                        match = true
+                                        notificationHandler.showSimpleNotification()
+                                    } else {
+                                        match = false
+                                    }
                                 }
+                                Count++
+                                Log.i("FIAP_Count", "onResponse: Count depois da lista ${Count}")
+                            }else{
+                                Count ++
                             }
-                            Count ++
                         }
 
                         override fun onFailure(call: Call<List<User>>, t: Throwable) {
